@@ -15,7 +15,7 @@ source:
     - 0002-byobu-conda.diff
 
 build:
-  number: 0
+  number: 1000
   skip: True  # [win]
 
 requirements:
@@ -23,6 +23,7 @@ requirements:
     - autoconf
     - automake
     - make
+  host:
     - coreutils  # [osx]
     - gettext    # [osx]
   run:
