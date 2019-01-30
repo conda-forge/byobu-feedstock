@@ -1,7 +1,7 @@
 From f8c9df6fdbd11727d560b361898640d1413fe0e2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Patrick=20Sodr=C3=A9?= <psodre@gmail.com>
 Date: Tue, 25 Dec 2018 07:39:45 +0000
-Subject: [PATCH] Add byobu-conda command to aid on conda related quirks
+Subject: [PATCH 1/2] Add byobu-conda command to aid on conda related quirks
 
   - The byobu environment is activate within every pane.
   - The base environment is stacked on top of byobu.
@@ -248,5 +248,31 @@ index 8aaaaf3f..4a519106 100755
  if [ -d "$BYOBU_CONFIG_DIR" ]; then
  	export BYOBU_CONFIG_DIR="$BYOBU_CONFIG_DIR"
 -- 
-2.17.2 (Apple Git-113)
+2.20.1
+
+
+From ec8e5ae8a7389a53eaecddad80481f160a7e736b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Patrick=20Sodr=C3=A9?= <psodre@gmail.com>
+Date: Wed, 30 Jan 2019 01:28:14 +0000
+Subject: [PATCH 2/2] Support conda 4.5.x and 4.6.x syntax
+
+---
+ usr/bin/byobu-enable-conda.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/usr/bin/byobu-enable-conda.in b/usr/bin/byobu-enable-conda.in
+index cc04abb9..cbee9418 100755
+--- a/usr/bin/byobu-enable-conda.in
++++ b/usr/bin/byobu-enable-conda.in
+@@ -31,7 +31,7 @@ prompt="${BYOBU_CONFIG_DIR}/conda"
+ # This gets the conda function into the shell
+ echo ". ${BYOBU_CONDA_ROOT}/etc/profile.d/conda.sh #byobu-conda#" > "$prompt"
+ # This gets byobu back in the path
+-echo "_conda_reactivate #byobu-conda#" >> "$prompt"
++echo "_conda_reactivate 2&1> >/dev/null || __conda_reactivate 2&>1 >/dev/null #byobu-conda#\n" >> "$prompt"
+ if [ "${BYOBU_PREFIX}" != "${BYOBU_CONDA_ROOT}" ]; then
+ 	# This gets conda base reactivated with higher precedence than byobu.
+ 	echo "conda activate ${BYOBU_CONDA_ROOT} #byobu-conda#" >> "$prompt"
+-- 
+2.20.1
 
