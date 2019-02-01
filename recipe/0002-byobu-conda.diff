@@ -269,7 +269,7 @@ index cc04abb9..cbee9418 100755
  echo ". ${BYOBU_CONDA_ROOT}/etc/profile.d/conda.sh #byobu-conda#" > "$prompt"
  # This gets byobu back in the path
 -echo "_conda_reactivate #byobu-conda#" >> "$prompt"
-+echo "_conda_reactivate 2&1> >/dev/null || __conda_reactivate 2&>1 >/dev/null #byobu-conda#\n" >> "$prompt"
++echo "_conda_reactivate >/dev/null 2>&1 || __conda_reactivate >/dev/null 2>&1 #byobu-conda#" >> "$prompt"
  if [ "${BYOBU_PREFIX}" != "${BYOBU_CONDA_ROOT}" ]; then
  	# This gets conda base reactivated with higher precedence than byobu.
  	echo "conda activate ${BYOBU_CONDA_ROOT} #byobu-conda#" >> "$prompt"
