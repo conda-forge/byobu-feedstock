@@ -15,7 +15,7 @@ source:
     - 0002-byobu-conda.diff
 
 build:
-  number: 1001
+  number: 1002
   skip: True  # [win]
 
 requirements:
