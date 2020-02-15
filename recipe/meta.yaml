@@ -1,5 +1,5 @@
 {% set name = "byobu" %}
-{% set version = "5.129" %}
+{% set version = "5.132" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://launchpad.net/byobu/trunk/{{ version }}/+download/byobu_{{ version }}.orig.tar.gz
-  sha256: e5135f20750c359b6371ee87cf2729c6038fbf3a6e66680e67f6a2125b07c2b9
+  sha256: 704db58a22c2b7faba251c6dbd29d4e0be610e340ffea9b0e816f61819ba2364
   patches:
     # Ensure we use python in the same conda environment
     - 0001-use-local-python.diff
