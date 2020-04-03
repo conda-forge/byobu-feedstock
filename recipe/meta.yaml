@@ -49,7 +49,7 @@ test:
 
 about:
   home: http://byobu.co
-  license: GPL-3
+  license: GPL-3.0
   license_family: GPL
   license_file: COPYING
   summary: 'Byobu is a text-based window manager and terminal multiplexer.'
