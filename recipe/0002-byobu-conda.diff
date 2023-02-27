@@ -44,7 +44,7 @@ index fa33a26a..0d697ea1 100644
 @@ -1,4 +1,4 @@
 -bin_SCRIPTS = byobu  byobu-config  byobu-ctrl-a  byobu-disable  byobu-disable-prompt  byobu-enable  byobu-enable-prompt  byobu-export  byobu-janitor  byobu-keybindings  byobu-launch  byobu-launcher  byobu-launcher-install  byobu-launcher-uninstall  byobu-layout  byobu-prompt  byobu-quiet  byobu-reconnect-sockets  byobu-select-backend  byobu-select-profile  byobu-select-session  byobu-silent  byobu-status  byobu-status-detail  byobu-shell byobu-ugraph byobu-ulevel col1 ctail wifi-status vigpg manifest purge-old-kernels
 +bin_SCRIPTS = byobu  byobu-conda  byobu-config  byobu-ctrl-a  byobu-disable  byobu-disable-conda  byobu-disable-prompt  byobu-enable  byobu-enable-conda  byobu-enable-prompt  byobu-export  byobu-janitor  byobu-keybindings  byobu-launch  byobu-launcher  byobu-launcher-install  byobu-launcher-uninstall  byobu-layout  byobu-prompt  byobu-quiet  byobu-reconnect-sockets  byobu-select-backend  byobu-select-profile  byobu-select-session  byobu-silent  byobu-status  byobu-status-detail  byobu-shell byobu-ugraph byobu-ulevel col1 ctail wifi-status vigpg manifest purge-old-kernels
- 
+
  install-exec-hook:
  	cd $(DESTDIR)$(bindir) && rm -f byobu-screen && $(LN_S) byobu byobu-screen
 diff --git a/usr/bin/byobu-conda.in b/usr/bin/byobu-conda.in
@@ -212,7 +212,7 @@ index 8aaaaf3f..4a519106 100755
 @@ -24,6 +24,37 @@ PKG="byobu"
  [ -r "$HOME/.byoburc" ] && . "$HOME/.byoburc"
  [ -n "$BYOBU_PREFIX" ] || BYOBU_PREFIX="@prefix@"
- 
+
 +# Enable the conda command
 +if ! (type conda 2>&1 | grep -q 'conda is a function'); then
 +	conda_sh="etc/profile.d/conda.sh"
@@ -247,32 +247,7 @@ index 8aaaaf3f..4a519106 100755
  # Create and export the user configuration directory
  if [ -d "$BYOBU_CONFIG_DIR" ]; then
  	export BYOBU_CONFIG_DIR="$BYOBU_CONFIG_DIR"
--- 
+--
 2.20.1
 
-
-From ec8e5ae8a7389a53eaecddad80481f160a7e736b Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Patrick=20Sodr=C3=A9?= <psodre@gmail.com>
-Date: Wed, 30 Jan 2019 01:28:14 +0000
-Subject: [PATCH 2/2] Support conda 4.5.x and 4.6.x syntax
-
----
- usr/bin/byobu-enable-conda.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/usr/bin/byobu-enable-conda.in b/usr/bin/byobu-enable-conda.in
-index cc04abb9..cbee9418 100755
---- a/usr/bin/byobu-enable-conda.in
-+++ b/usr/bin/byobu-enable-conda.in
-@@ -31,7 +31,7 @@ prompt="${BYOBU_CONFIG_DIR}/conda"
- # This gets the conda function into the shell
- echo ". ${BYOBU_CONDA_ROOT}/etc/profile.d/conda.sh #byobu-conda#" > "$prompt"
- # This gets byobu back in the path
--echo "_conda_reactivate #byobu-conda#" >> "$prompt"
-+echo "_conda_reactivate >/dev/null 2>&1 || __conda_reactivate >/dev/null 2>&1 #byobu-conda#" >> "$prompt"
- if [ "${BYOBU_PREFIX}" != "${BYOBU_CONDA_ROOT}" ]; then
- 	# This gets conda base reactivated with higher precedence than byobu.
- 	echo "conda activate ${BYOBU_CONDA_ROOT} #byobu-conda#" >> "$prompt"
--- 
-2.20.1
 
