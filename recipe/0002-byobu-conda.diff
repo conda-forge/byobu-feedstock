@@ -44,7 +44,7 @@ index fa33a26a..0d697ea1 100644
 @@ -1,4 +1,4 @@
 -bin_SCRIPTS = byobu  byobu-config  byobu-ctrl-a  byobu-disable  byobu-disable-prompt  byobu-enable  byobu-enable-prompt  byobu-export  byobu-janitor  byobu-keybindings  byobu-launch  byobu-launcher  byobu-launcher-install  byobu-launcher-uninstall  byobu-layout  byobu-prompt  byobu-quiet  byobu-reconnect-sockets  byobu-select-backend  byobu-select-profile  byobu-select-session  byobu-silent  byobu-status  byobu-status-detail  byobu-shell byobu-ugraph byobu-ulevel col1 ctail wifi-status vigpg manifest purge-old-kernels
 +bin_SCRIPTS = byobu  byobu-conda  byobu-config  byobu-ctrl-a  byobu-disable  byobu-disable-conda  byobu-disable-prompt  byobu-enable  byobu-enable-conda  byobu-enable-prompt  byobu-export  byobu-janitor  byobu-keybindings  byobu-launch  byobu-launcher  byobu-launcher-install  byobu-launcher-uninstall  byobu-layout  byobu-prompt  byobu-quiet  byobu-reconnect-sockets  byobu-select-backend  byobu-select-profile  byobu-select-session  byobu-silent  byobu-status  byobu-status-detail  byobu-shell byobu-ugraph byobu-ulevel col1 ctail wifi-status vigpg manifest purge-old-kernels
-
+ 
  install-exec-hook:
  	cd $(DESTDIR)$(bindir) && rm -f byobu-screen && $(LN_S) byobu byobu-screen
 diff --git a/usr/bin/byobu-conda.in b/usr/bin/byobu-conda.in
@@ -212,7 +212,7 @@ index 8aaaaf3f..4a519106 100755
 @@ -24,6 +24,37 @@ PKG="byobu"
  [ -r "$HOME/.byoburc" ] && . "$HOME/.byoburc"
  [ -n "$BYOBU_PREFIX" ] || BYOBU_PREFIX="@prefix@"
-
+ 
 +# Enable the conda command
 +if ! (type conda 2>&1 | grep -q 'conda is a function'); then
 +	conda_sh="etc/profile.d/conda.sh"
@@ -247,7 +247,7 @@ index 8aaaaf3f..4a519106 100755
  # Create and export the user configuration directory
  if [ -d "$BYOBU_CONFIG_DIR" ]; then
  	export BYOBU_CONFIG_DIR="$BYOBU_CONFIG_DIR"
---
+-- 
 2.20.1
 
 

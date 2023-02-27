@@ -20,6 +20,6 @@ index cc04abb9..cbee9418 100755
  if [ "${BYOBU_PREFIX}" != "${BYOBU_CONDA_ROOT}" ]; then
  	# This gets conda base reactivated with higher precedence than byobu.
  	echo "conda activate ${BYOBU_CONDA_ROOT} #byobu-conda#" >> "$prompt"
---
+-- 
 2.20.1
 
