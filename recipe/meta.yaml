@@ -16,7 +16,7 @@ source:
     - 0003-byobu-conda-update.diff
 
 build:
-  number: 1
+  number: 2
   skip: True  # [win]
 
 requirements:
@@ -49,8 +49,8 @@ test:
     - test -x ${CONDA_PREFIX}/bin/byobu-disable-conda
 
 about:
-  home: http://byobu.co
-  license: GPL-3.0
+  home: https://www.byobu.org/
+  license: GPL-3.0-only
   license_family: GPL
   license_file: COPYING
   summary: 'Byobu is a text-based window manager and terminal multiplexer.'
@@ -63,8 +63,8 @@ about:
     notifications for both the GNU Screen window manager and the more modern
     Tmux terminal multiplexer, and works on most Linux, BSD, and Mac
     distributions.
-  doc_url: http://byobu.co/documentation.html
-  dev_url: http://bazaar.launchpad.net/~kirkland/byobu/trunk/files
+  doc_url: https://www.byobu.org/documentation
+  dev_url: https://bazaar.launchpad.net/~kirkland/byobu/trunk/files
 
 extra:
   recipe-maintainers:

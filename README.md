@@ -3,15 +3,15 @@ About byobu-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/byobu-feedstock/blob/main/LICENSE.txt)
 
-Home: http://byobu.co
+Home: https://www.byobu.org/
 
 Package license: GPL-3.0
 
 Summary: Byobu is a text-based window manager and terminal multiplexer.
 
-Development: http://bazaar.launchpad.net/~kirkland/byobu/trunk/files
+Development: https://bazaar.launchpad.net/~kirkland/byobu/trunk/files
 
-Documentation: http://byobu.co/documentation.html
+Documentation: https://www.byobu.org/documentation
 
 Byobu was originally designed to provide elegant enhancements to the
 otherwise functional, plain, practical GNU Screen, for the Ubuntu server
@@ -72,6 +72,13 @@ Current build status
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2415&branchName=main">
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/byobu-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_arm64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2415&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/byobu-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_" alt="variant">
                 </a>
               </td>
             </tr>
