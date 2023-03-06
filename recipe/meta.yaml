@@ -24,9 +24,9 @@ requirements:
     - autoconf
     - automake
     - make
-  host:
-    - coreutils  # [osx]
-    - gettext    # [osx]
+  # host:
+  #   - coreutils  # [osx]
+  #   - gettext    # [osx]
   run:
     - newt
     - tmux >=1.5
