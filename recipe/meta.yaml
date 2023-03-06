@@ -24,9 +24,6 @@ requirements:
     - autoconf
     - automake
     - make
-  # host:
-  #   - coreutils  # [osx]
-  #   - gettext    # [osx]
   run:
     - newt
     - tmux >=1.5
@@ -38,11 +35,11 @@ requirements:
 
 test:
   commands:
-    - byobu -c "echo 'Hello conda-forge!'"
+    - byobu -c "echo 'Hello conda-forge!'"  # [build_platform == target_platform]
 
     # Tests patch 0001 works
     - unset BYOBU_PYTHON
-    - test "$(which python)" = "$(which $(byobu -c 'echo ${BYOBU_PYTHON}'))"
+    - test "$(which python)" = "$(which $(byobu -c 'echo ${BYOBU_PYTHON}'))"  # [build_platform == target_platform]
 
     # Test patch 0002 files
     - test -x ${CONDA_PREFIX}/bin/byobu-enable-conda

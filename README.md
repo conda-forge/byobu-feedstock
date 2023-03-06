@@ -5,7 +5,7 @@ Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/byobu-feedstock
 
 Home: https://www.byobu.org/
 
-Package license: GPL-3.0
+Package license: GPL-3.0-only
 
 Summary: Byobu is a text-based window manager and terminal multiplexer.
 
