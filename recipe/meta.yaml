@@ -13,9 +13,10 @@ source:
     - 0001-use-local-python.diff
     # Ensure byobu conda environment is activated
     - 0002-byobu-conda.diff
+    - 0003-byobu-conda-update.diff
 
 build:
-  number: 0
+  number: 1
   skip: True  # [win]
 
 requirements:
@@ -68,3 +69,4 @@ about:
 extra:
   recipe-maintainers:
     - sodre
+    - matthiasdiener

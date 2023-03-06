@@ -1,0 +1,25 @@
+From ec8e5ae8a7389a53eaecddad80481f160a7e736b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Patrick=20Sodr=C3=A9?= <psodre@gmail.com>
+Date: Wed, 30 Jan 2019 01:28:14 +0000
+Subject: [PATCH 2/2] Support conda 4.5.x and 4.6.x syntax
+
+---
+ usr/bin/byobu-enable-conda.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/usr/bin/byobu-enable-conda.in b/usr/bin/byobu-enable-conda.in
+index cc04abb9..cbee9418 100755
+--- a/usr/bin/byobu-enable-conda.in
++++ b/usr/bin/byobu-enable-conda.in
+@@ -31,7 +31,7 @@ prompt="${BYOBU_CONFIG_DIR}/conda"
+ # This gets the conda function into the shell
+ echo ". ${BYOBU_CONDA_ROOT}/etc/profile.d/conda.sh #byobu-conda#" > "$prompt"
+ # This gets byobu back in the path
+-echo "_conda_reactivate #byobu-conda#" >> "$prompt"
++echo "_conda_reactivate >/dev/null 2>&1 || __conda_reactivate >/dev/null 2>&1 #byobu-conda#" >> "$prompt"
+ if [ "${BYOBU_PREFIX}" != "${BYOBU_CONDA_ROOT}" ]; then
+ 	# This gets conda base reactivated with higher precedence than byobu.
+ 	echo "conda activate ${BYOBU_CONDA_ROOT} #byobu-conda#" >> "$prompt"
+-- 
+2.20.1
+
