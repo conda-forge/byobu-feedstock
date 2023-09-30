@@ -209,7 +209,7 @@ diff --git a/usr/lib/byobu/include/dirs.in b/usr/lib/byobu/include/dirs.in
 index 8aaaaf3f..4a519106 100755
 --- a/usr/lib/byobu/include/dirs.in
 +++ b/usr/lib/byobu/include/dirs.in
-@@ -24,6 +24,37 @@ PKG="byobu"
+@@ -24,6 +24,36 @@ PKG="byobu"
  [ -r "$HOME/.byoburc" ] && . "$HOME/.byoburc"
  [ -n "$BYOBU_PREFIX" ] || BYOBU_PREFIX="@prefix@"
  
@@ -219,7 +219,7 @@ index 8aaaaf3f..4a519106 100755
 +	if [ -n "$BYOBU_CONDA_ROOT" ]; then
 +		# User defined location
 +		. "$BYOBU_CONDA_ROOT/$conda_sh"
-+	elif [ -n $CONDA_EXE ]; then
++	elif [ -n "$CONDA_EXE" ]; then
 +		# When the environment is already activated
 +		. "$(cd $(dirname $CONDA_EXE)/..; pwd)/$conda_sh"
 +	elif [ -r "${BYOBU_PREFIX}/${conda_sh}" ]; then
@@ -232,9 +232,8 @@ index 8aaaaf3f..4a519106 100755
 +		# Others have helpful sysadmins
 +		. "/${conda_sh}"
 +	else
-+		echo "ERROR: Please source etc/profile.d/conda.sh first."
-+		echo "ERROR: Alternatively, activate the byobu environment and call byobu-enable-conda"
-+		exit 1
++		echo "WARNING: Please source etc/profile.d/conda.sh first."
++		echo "WARNING: Alternatively, activate the byobu environment and call byobu-enable-conda"
 +	fi
 +fi
 +BYOBU_CONDA_ROOT=$_CONDA_ROOT
