@@ -213,7 +213,7 @@ index 8aaaaf3f..4a519106 100755
  [ -r "$HOME/.byoburc" ] && . "$HOME/.byoburc"
  [ -n "$BYOBU_PREFIX" ] || BYOBU_PREFIX="@prefix@"
  
-+# Enable the conda command
++# Enable the conda/mamba/micromamba command
 +if ! (type conda 2>&1 | grep -q 'conda is a function'); then
 +	conda_sh="etc/profile.d/conda.sh"
 +	if [ -n "$BYOBU_CONDA_ROOT" ]; then
@@ -231,6 +231,12 @@ index 8aaaaf3f..4a519106 100755
 +	elif [ -r "/${conda_sh}" ]; then
 +		# Others have helpful sysadmins
 +		. "/${conda_sh}"
++	elif type mamba >/dev/null 2>&1; then
++		# Some users install byobu using mamba
++		eval "$(mamba shell hook --shell ${SHELL##*/})"
++	elif type micromamba >/dev/null 2>&1; then
++		# Some users install byobu using micromamba
++		eval "$(micromamba shell hook --shell ${SHELL##*/})"
 +	else
 +		echo "WARNING: Please source etc/profile.d/conda.sh first."
 +		echo "WARNING: Alternatively, activate the byobu environment and call byobu-enable-conda"
@@ -238,9 +244,18 @@ index 8aaaaf3f..4a519106 100755
 +fi
 +BYOBU_CONDA_ROOT=$_CONDA_ROOT
 +
-+# ...and some users install byobu on conda environments
++# ...and some users install byobu on conda environments using conda/mamba/micromamba
 +if [ "$CONDA_PREFIX" != "$BYOBU_PREFIX" ]; then
-+	conda activate ${BYOBU_PREFIX}
++	if type conda >/dev/null 2>&1; then
++		conda activate ${BYOBU_PREFIX}
++	elif type mamba >/dev/null 2>&1; then
++		mamba activate ${BYOBU_PREFIX}
++	elif type micromamba >/dev/null 2>&1; then
++		micromamba activate ${BYOBU_PREFIX}
++	else
++		echo "ERROR: Please activate the byobu environment first."
++		exit 1
++	fi
 +fi
 +
  # Create and export the user configuration directory
