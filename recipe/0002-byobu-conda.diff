@@ -253,8 +253,7 @@ index 8aaaaf3f..4a519106 100755
 +	elif type micromamba >/dev/null 2>&1; then
 +		micromamba activate ${BYOBU_PREFIX}
 +	else
-+		echo "ERROR: Please activate the byobu environment first."
-+		exit 1
++		echo "WARNING: Please activate the byobu environment first."
 +	fi
 +fi
 +
