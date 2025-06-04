@@ -16,7 +16,7 @@ source:
     - 0003-byobu-conda-update.diff
 
 build:
-  number: 3
+  number: 4
   skip: True  # [win]
 
 requirements:
