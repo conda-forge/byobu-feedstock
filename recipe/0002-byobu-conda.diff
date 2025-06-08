@@ -209,7 +209,7 @@ diff --git a/usr/lib/byobu/include/dirs.in b/usr/lib/byobu/include/dirs.in
 index 8aaaaf3f..4a519106 100755
 --- a/usr/lib/byobu/include/dirs.in
 +++ b/usr/lib/byobu/include/dirs.in
-@@ -24,6 +24,36 @@ PKG="byobu"
+@@ -24,6 +24,50 @@ PKG="byobu"
  [ -r "$HOME/.byoburc" ] && . "$HOME/.byoburc"
  [ -n "$BYOBU_PREFIX" ] || BYOBU_PREFIX="@prefix@"
  
