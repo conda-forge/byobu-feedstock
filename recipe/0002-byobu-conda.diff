@@ -233,10 +233,10 @@ index 8aaaaf3f..4a519106 100755
 +		. "/${conda_sh}"
 +	elif type mamba >/dev/null 2>&1; then
 +		# Some users install byobu using mamba
-+		eval "$(mamba shell hook --shell ${SHELL##*/})"
++		eval "$(mamba shell hook --shell posix)"
 +	elif type micromamba >/dev/null 2>&1; then
 +		# Some users install byobu using micromamba
-+		eval "$(micromamba shell hook --shell ${SHELL##*/})"
++		eval "$(micromamba shell hook --shell posix)"
 +	else
 +		echo "WARNING: Please source etc/profile.d/conda.sh first."
 +		echo "WARNING: Alternatively, activate the byobu environment and call byobu-enable-conda"
