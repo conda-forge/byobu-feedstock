@@ -12,8 +12,8 @@ Subject: [PATCH 2/2] Add byobu-conda command to aid on conda related quirks
  usr/bin/byobu-conda.in         | 39 ++++++++++++++++++++++
  usr/bin/byobu-disable-conda.in | 41 +++++++++++++++++++++++
  usr/bin/byobu-enable-conda.in  | 60 ++++++++++++++++++++++++++++++++++
- usr/lib/byobu/include/dirs.in  | 47 ++++++++++++++++++++++++++
- 6 files changed, 191 insertions(+), 1 deletion(-)
+ usr/lib/byobu/include/dirs.in  | 53 ++++++++++++++++++++++++++++++
+ 6 files changed, 197 insertions(+), 1 deletion(-)
  create mode 100755 usr/bin/byobu-conda.in
  create mode 100755 usr/bin/byobu-disable-conda.in
  create mode 100755 usr/bin/byobu-enable-conda.in
@@ -206,15 +206,15 @@ index 00000000..e408506b
 +
 +# vi: syntax=sh ts=4 noexpandtab
 diff --git a/usr/lib/byobu/include/dirs.in b/usr/lib/byobu/include/dirs.in
-index 13abf3a3..e57174c8 100755
+index 13abf3a3..71314e77 100755
 --- a/usr/lib/byobu/include/dirs.in
 +++ b/usr/lib/byobu/include/dirs.in
-@@ -24,6 +24,53 @@ PKG="byobu"
+@@ -24,6 +24,59 @@ PKG="byobu"
  [ -r "$HOME/.byoburc" ] && . "$HOME/.byoburc"
  [ -n "$BYOBU_PREFIX" ] || BYOBU_PREFIX="@prefix@"
  
 +# Enable the conda/mamba/micromamba command
-+if ! (command -v conda 2>&1 | grep -q 'conda is a function'); then
++if ! (LC_ALL=C type conda 2>&1 | grep -q "function"); then
 +	conda_sh="etc/profile.d/conda.sh"
 +	if [ -n "$BYOBU_CONDA_ROOT" ]; then
 +		# User defined location
@@ -231,13 +231,19 @@ index 13abf3a3..e57174c8 100755
 +	elif [ -r "/${conda_sh}" ]; then
 +		# Others have helpful sysadmins
 +		. "/${conda_sh}"
-+	elif command -v mamba > /dev/null 2>&1; then
-+		# Some users install byobu using mamba
++	elif LC_ALL=C type mamba 2>&1 | grep -q "function"; then
++		# Some users install byobu using mamba and it is already initialized
++		:
++	elif LC_ALL=C type micromamba 2>&1 | grep -q "function"; then
++		# Some users install byobu using micromamba and it is already initialized
++		:
++	elif type mamba > /dev/null 2>&1; then
++		# mamba is installed, but not initialized
 +		eval "$(mamba shell hook --shell posix)"
-+	elif command -v micromamba > /dev/null 2>&1; then
-+		# Some users install byobu using micromamba
++	elif type micromamba > /dev/null 2>&1; then
++		# micromamba is installed, but not initialized
 +		eval "$(micromamba shell hook --shell posix)"
-+	elif command -v pixi > /dev/null 2>&1; then
++	elif type pixi > /dev/null 2>&1; then
 +		# Ignore warnings if users install byobu using pixi
 +		:
 +	else
@@ -249,11 +255,11 @@ index 13abf3a3..e57174c8 100755
 +
 +# ...and some users install byobu on conda environments using conda/mamba/micromamba
 +if ! [ "$CONDA_PREFIX" -ef "$BYOBU_PREFIX" ]; then
-+	if command -v conda > /dev/null 2>&1; then
++	if LC_ALL=C type conda 2>&1 | grep -q "function"; then
 +		conda activate ${BYOBU_PREFIX}
-+	elif command -v mamba > /dev/null 2>&1; then
++	elif LC_ALL=C type mamba 2>&1 | grep -q "function"; then
 +		mamba activate ${BYOBU_PREFIX}
-+	elif command -v micromamba > /dev/null 2>&1; then
++	elif LC_ALL=C type micromamba 2>&1 | grep -q "function"; then
 +		micromamba activate ${BYOBU_PREFIX}
 +	else
 +		echo "WARNING: Please activate the byobu environment first."
