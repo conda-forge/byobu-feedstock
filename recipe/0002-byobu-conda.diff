@@ -12,8 +12,8 @@ Subject: [PATCH 2/2] Add byobu-conda command to aid on conda related quirks
  usr/bin/byobu-conda.in         | 39 ++++++++++++++++++++++
  usr/bin/byobu-disable-conda.in | 41 +++++++++++++++++++++++
  usr/bin/byobu-enable-conda.in  | 60 ++++++++++++++++++++++++++++++++++
- usr/lib/byobu/include/dirs.in  | 44 +++++++++++++++++++++++++
- 6 files changed, 188 insertions(+), 1 deletion(-)
+ usr/lib/byobu/include/dirs.in  | 47 ++++++++++++++++++++++++++
+ 6 files changed, 191 insertions(+), 1 deletion(-)
  create mode 100755 usr/bin/byobu-conda.in
  create mode 100755 usr/bin/byobu-disable-conda.in
  create mode 100755 usr/bin/byobu-enable-conda.in
@@ -206,15 +206,15 @@ index 00000000..e408506b
 +
 +# vi: syntax=sh ts=4 noexpandtab
 diff --git a/usr/lib/byobu/include/dirs.in b/usr/lib/byobu/include/dirs.in
-index 13abf3a3..3cfba100 100755
+index 13abf3a3..e57174c8 100755
 --- a/usr/lib/byobu/include/dirs.in
 +++ b/usr/lib/byobu/include/dirs.in
-@@ -24,6 +24,50 @@ PKG="byobu"
+@@ -24,6 +24,53 @@ PKG="byobu"
  [ -r "$HOME/.byoburc" ] && . "$HOME/.byoburc"
  [ -n "$BYOBU_PREFIX" ] || BYOBU_PREFIX="@prefix@"
  
 +# Enable the conda/mamba/micromamba command
-+if ! (type conda 2>&1 | grep -q 'conda is a function'); then
++if ! (command -v conda 2>&1 | grep -q 'conda is a function'); then
 +	conda_sh="etc/profile.d/conda.sh"
 +	if [ -n "$BYOBU_CONDA_ROOT" ]; then
 +		# User defined location
@@ -231,12 +231,15 @@ index 13abf3a3..3cfba100 100755
 +	elif [ -r "/${conda_sh}" ]; then
 +		# Others have helpful sysadmins
 +		. "/${conda_sh}"
-+	elif type mamba >/dev/null 2>&1; then
++	elif command -v mamba > /dev/null 2>&1; then
 +		# Some users install byobu using mamba
 +		eval "$(mamba shell hook --shell posix)"
-+	elif type micromamba >/dev/null 2>&1; then
++	elif command -v micromamba > /dev/null 2>&1; then
 +		# Some users install byobu using micromamba
 +		eval "$(micromamba shell hook --shell posix)"
++	elif command -v pixi > /dev/null 2>&1; then
++		# Ignore warnings if users install byobu using pixi
++		:
 +	else
 +		echo "WARNING: Please source etc/profile.d/conda.sh first."
 +		echo "WARNING: Alternatively, activate the byobu environment and call byobu-enable-conda"
@@ -245,12 +248,12 @@ index 13abf3a3..3cfba100 100755
 +BYOBU_CONDA_ROOT=$_CONDA_ROOT
 +
 +# ...and some users install byobu on conda environments using conda/mamba/micromamba
-+if [ "$CONDA_PREFIX" != "$BYOBU_PREFIX" ]; then
-+	if type conda >/dev/null 2>&1; then
++if ! [ "$CONDA_PREFIX" -ef "$BYOBU_PREFIX" ]; then
++	if command -v conda > /dev/null 2>&1; then
 +		conda activate ${BYOBU_PREFIX}
-+	elif type mamba >/dev/null 2>&1; then
++	elif command -v mamba > /dev/null 2>&1; then
 +		mamba activate ${BYOBU_PREFIX}
-+	elif type micromamba >/dev/null 2>&1; then
++	elif command -v micromamba > /dev/null 2>&1; then
 +		micromamba activate ${BYOBU_PREFIX}
 +	else
 +		echo "WARNING: Please activate the byobu environment first."
