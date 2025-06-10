@@ -1,7 +1,7 @@
 From f8c9df6fdbd11727d560b361898640d1413fe0e2 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Patrick=20Sodr=C3=A9?= <psodre@gmail.com>
 Date: Tue, 25 Dec 2018 07:39:45 +0000
-Subject: [PATCH 1/2] Add byobu-conda command to aid on conda related quirks
+Subject: [PATCH 2/2] Add byobu-conda command to aid on conda related quirks
 
   - The byobu environment is activate within every pane.
   - The base environment is stacked on top of byobu.
@@ -12,8 +12,8 @@ Subject: [PATCH 1/2] Add byobu-conda command to aid on conda related quirks
  usr/bin/byobu-conda.in         | 39 ++++++++++++++++++++++
  usr/bin/byobu-disable-conda.in | 41 +++++++++++++++++++++++
  usr/bin/byobu-enable-conda.in  | 60 ++++++++++++++++++++++++++++++++++
- usr/lib/byobu/include/dirs.in  | 31 ++++++++++++++++++
- 6 files changed, 175 insertions(+), 1 deletion(-)
+ usr/lib/byobu/include/dirs.in  | 44 +++++++++++++++++++++++++
+ 6 files changed, 188 insertions(+), 1 deletion(-)
  create mode 100755 usr/bin/byobu-conda.in
  create mode 100755 usr/bin/byobu-disable-conda.in
  create mode 100755 usr/bin/byobu-enable-conda.in
@@ -141,7 +141,7 @@ index 00000000..e2a96845
 +# vi: syntax=sh ts=4 noexpandtab
 diff --git a/usr/bin/byobu-enable-conda.in b/usr/bin/byobu-enable-conda.in
 new file mode 100755
-index 00000000..cc04abb9
+index 00000000..e408506b
 --- /dev/null
 +++ b/usr/bin/byobu-enable-conda.in
 @@ -0,0 +1,60 @@
@@ -178,7 +178,7 @@ index 00000000..cc04abb9
 +# This gets the conda function into the shell
 +echo ". ${BYOBU_CONDA_ROOT}/etc/profile.d/conda.sh #byobu-conda#" > "$prompt"
 +# This gets byobu back in the path
-+echo "_conda_reactivate #byobu-conda#" >> "$prompt"
++echo "_conda_reactivate >/dev/null 2>&1 || __conda_reactivate >/dev/null 2>&1 #byobu-conda#" >> "$prompt"
 +if [ "${BYOBU_PREFIX}" != "${BYOBU_CONDA_ROOT}" ]; then
 +	# This gets conda base reactivated with higher precedence than byobu.
 +	echo "conda activate ${BYOBU_CONDA_ROOT} #byobu-conda#" >> "$prompt"
@@ -206,7 +206,7 @@ index 00000000..cc04abb9
 +
 +# vi: syntax=sh ts=4 noexpandtab
 diff --git a/usr/lib/byobu/include/dirs.in b/usr/lib/byobu/include/dirs.in
-index 8aaaaf3f..4a519106 100755
+index 13abf3a3..3cfba100 100755
 --- a/usr/lib/byobu/include/dirs.in
 +++ b/usr/lib/byobu/include/dirs.in
 @@ -24,6 +24,50 @@ PKG="byobu"
@@ -258,9 +258,5 @@ index 8aaaaf3f..4a519106 100755
 +fi
 +
  # Create and export the user configuration directory
- if [ -d "$BYOBU_CONFIG_DIR" ]; then
- 	export BYOBU_CONFIG_DIR="$BYOBU_CONFIG_DIR"
--- 
-2.20.1
-
-
+ # BYOBU_CONFIG_DIR if set, ~/.byobu if it exists, otherwise XDG_CONFIG_HOME/byobu
+ if [ -z "$BYOBU_CONFIG_DIR" ]; then
