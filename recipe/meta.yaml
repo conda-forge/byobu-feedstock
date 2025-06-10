@@ -1,13 +1,13 @@
-{% set name = "byobu" %}
-{% set version = "5.133" %}
+{% set version = "6.13" %}
+{% set sha256 = "9690c629588e8f95d16b2461950d39934faaf8005dd2a283886d4e3bd6c86df6" %}
 
 package:
-  name: {{ name|lower }}
+  name: byobu
   version: {{ version }}
 
 source:
-  url: https://launchpad.net/byobu/trunk/{{ version }}/+download/byobu_{{ version }}.orig.tar.gz
-  sha256: 4d8ea48f8c059e56f7174df89b04a08c32286bae5a21562c5c6f61be6dab7563
+  url: https://github.com/dustinkirkland/byobu/archive/refs/tags/{{ version }}.tar.gz
+  sha256: {{ sha256 }}
   patches:
     # Ensure we use python in the same conda environment
     - 0001-use-local-python.diff
@@ -16,7 +16,7 @@ source:
     - 0003-byobu-conda-update.diff
 
 build:
-  number: 5
+  number: 0
   skip: True  # [win]
 
 requirements:
@@ -61,7 +61,7 @@ about:
     Tmux terminal multiplexer, and works on most Linux, BSD, and Mac
     distributions.
   doc_url: https://www.byobu.org/documentation
-  dev_url: https://bazaar.launchpad.net/~kirkland/byobu/trunk/files
+  dev_url: https://github.com/dustinkirkland/byobu
 
 extra:
   recipe-maintainers:
