@@ -9,7 +9,7 @@ Package license: GPL-3.0-only
 
 Summary: Byobu is a text-based window manager and terminal multiplexer.
 
-Development: https://bazaar.launchpad.net/~kirkland/byobu/trunk/files
+Development: https://github.com/dustinkirkland/byobu
 
 Documentation: https://www.byobu.org/documentation
 
