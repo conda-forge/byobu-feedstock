@@ -1,0 +1,74 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/73cd2eed94c576213c5f25ab57adf6d8c83e792a/schema.json
+schema_version: 1
+
+context:
+  name: byobu
+  version: "6.13"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/dustinkirkland/byobu/archive/${{ version }}.tar.gz
+  sha256: 9690c629588e8f95d16b2461950d39934faaf8005dd2a283886d4e3bd6c86df6
+  patches:
+    # Ensure we use python in the same conda environment
+    - 0001-use-local-python.diff
+    # Ensure byobu conda environment is activated
+    - 0002-byobu-conda.diff
+
+build:
+  number: 2
+  skip:
+    - win
+
+requirements:
+  build:
+    - autoconf
+    - automake
+    - make
+  run:
+    - newt
+    - tmux >=1.5
+    # GNU Tools
+    - if: osx
+      then:
+        - coreutils
+        - gawk
+        - gettext
+        - sed
+
+tests:
+  - script:
+      - if: build_platform == target_platform
+        then: byobu -c "echo 'Hello conda-forge!'"
+      # Tests patch 0001 works
+      - unset BYOBU_PYTHON
+      - if: build_platform == target_platform
+        then: test "$(which python)" = "$(which $(byobu -c 'echo ${BYOBU_PYTHON}'))"
+      # Test patch 0002 files
+      - test -x ${CONDA_PREFIX}/bin/byobu-enable-conda
+      - test -x ${CONDA_PREFIX}/bin/byobu-disable-conda
+
+about:
+  summary: Text-based window manager and terminal multiplexer
+  description: |
+    Byobu is a GPLv3 open source text-based window manager and terminal
+    multiplexer. It was originally designed to provide elegant enhancements to
+    the otherwise functional, plain, practical GNU Screen, for the Ubuntu server
+    distribution. Byobu now includes an enhanced profiles, convenient
+    keybindings, configuration utilities, and toggle-able system status
+    notifications for both the GNU Screen window manager and the more modern
+    Tmux terminal multiplexer, and works on most Linux, BSD, and Mac distributions.
+  license: GPL-3.0-only
+  license_file: COPYING
+  homepage: https://www.byobu.org/
+  repository: https://github.com/dustinkirkland/byobu
+  documentation: https://www.byobu.org/documentation
+
+extra:
+  recipe-maintainers:
+    - sodre
+    - matthiasdiener
+    - aywi

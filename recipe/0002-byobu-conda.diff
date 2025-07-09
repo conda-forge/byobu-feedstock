@@ -49,13 +49,13 @@ index fa33a26a..0d697ea1 100644
  	cd $(DESTDIR)$(bindir) && rm -f byobu-screen && $(LN_S) byobu byobu-screen
 diff --git a/usr/bin/byobu-conda.in b/usr/bin/byobu-conda.in
 new file mode 100755
-index 00000000..c1c685db
+index 00000000..63800b76
 --- /dev/null
 +++ b/usr/bin/byobu-conda.in
 @@ -0,0 +1,39 @@
 +#!/bin/sh -e
 +#
-+#    byobu-prompt
++#    byobu-conda
 +#    Copyright (C) 2013-2014 Dustin Kirkland
 +#    Copyright (C) 2018-2019 Patrick Sodré
 +#
@@ -206,65 +206,65 @@ index 00000000..e408506b
 +
 +# vi: syntax=sh ts=4 noexpandtab
 diff --git a/usr/lib/byobu/include/dirs.in b/usr/lib/byobu/include/dirs.in
-index 13abf3a3..71314e77 100755
+index 13abf3a3..dabf9f2d 100755
 --- a/usr/lib/byobu/include/dirs.in
 +++ b/usr/lib/byobu/include/dirs.in
 @@ -24,6 +24,59 @@ PKG="byobu"
  [ -r "$HOME/.byoburc" ] && . "$HOME/.byoburc"
  [ -n "$BYOBU_PREFIX" ] || BYOBU_PREFIX="@prefix@"
  
-+# Enable the conda/mamba/micromamba command
-+if ! (LC_ALL=C type conda 2>&1 | grep -q "function"); then
++# https://stackoverflow.com/a/79301903
++is_function() {
++	[ -n "$1" ] && [ "$(command -v -- "$1")" = "$1" ] || return 1
++	[ "$(command -V -- "$1")" != "$(unset -f -- "$1"; command -V -- "$1" 2>/dev/null)" ]
++}
++
++# Some users install byobu using conda/(micro)mamba but the byobu environment is not activated
++if ! [ "$CONDA_PREFIX" -ef "$BYOBU_PREFIX" ]; then
++	# Enable the conda/(micro)mamba command
 +	conda_sh="etc/profile.d/conda.sh"
-+	if [ -n "$BYOBU_CONDA_ROOT" ]; then
-+		# User defined location
-+		. "$BYOBU_CONDA_ROOT/$conda_sh"
-+	elif [ -n "$CONDA_EXE" ]; then
-+		# When the environment is already activated
-+		. "$(cd $(dirname $CONDA_EXE)/..; pwd)/$conda_sh"
++	if is_function conda || is_function mamba || is_function micromamba; then
++		# conda/(micro)mamba: is a function (already initialized)
++		:
++	elif [ -n "$BYOBU_CONDA_ROOT" ] && [ -r "${BYOBU_CONDA_ROOT}/${conda_sh}" ]; then
++		# conda: user defined location
++		. "${BYOBU_CONDA_ROOT}/${conda_sh}"
++	elif [ -n "$CONDA_EXE" ] && [ -r "$(cd $(dirname "$CONDA_EXE")/..; pwd)/${conda_sh}" ]; then
++		# conda: shell variable defined executable
++		. "$(cd $(dirname "$CONDA_EXE")/..; pwd)/${conda_sh}"
 +	elif [ -r "${BYOBU_PREFIX}/${conda_sh}" ]; then
-+		# Some install byobu on the base environment
++		# conda: byobu is installed on the base environment
 +		. "${BYOBU_PREFIX}/${conda_sh}"
 +	elif [ -r "${BYOBU_PREFIX}/../../${conda_sh}" ]; then
-+		# Others on environments from the root
++		# conda: byobu is installed on environments from the root
 +		. "${BYOBU_PREFIX}/../../${conda_sh}"
 +	elif [ -r "/${conda_sh}" ]; then
-+		# Others have helpful sysadmins
++		# conda: sysadmin configured location
 +		. "/${conda_sh}"
-+	elif LC_ALL=C type mamba 2>&1 | grep -q "function"; then
-+		# Some users install byobu using mamba and it is already initialized
-+		:
-+	elif LC_ALL=C type micromamba 2>&1 | grep -q "function"; then
-+		# Some users install byobu using micromamba and it is already initialized
-+		:
-+	elif type mamba > /dev/null 2>&1; then
-+		# mamba is installed, but not initialized
-+		eval "$(mamba shell hook --shell posix)"
-+	elif type micromamba > /dev/null 2>&1; then
-+		# micromamba is installed, but not initialized
-+		eval "$(micromamba shell hook --shell posix)"
-+	elif type pixi > /dev/null 2>&1; then
-+		# Ignore warnings if users install byobu using pixi
-+		:
++	elif [ -n "$MAMBA_EXE" ] && [ -x "$MAMBA_EXE" ]; then
++		# (micro)mamba: shell variable defined executable
++		eval "$("$MAMBA_EXE" shell hook -s posix)"
++	elif command -v mamba > /dev/null 2>&1; then
++		# mamba: is a command (not yet initialized)
++		eval "$(mamba shell hook -s posix)"
++	elif command -v micromamba > /dev/null 2>&1; then
++		# micromamba: is a command (not yet initialized)
++		eval "$(micromamba shell hook -s posix)"
 +	else
 +		echo "WARNING: Please source etc/profile.d/conda.sh first."
 +		echo "WARNING: Alternatively, activate the byobu environment and call byobu-enable-conda"
 +	fi
-+fi
-+BYOBU_CONDA_ROOT=$_CONDA_ROOT
-+
-+# ...and some users install byobu on conda environments using conda/mamba/micromamba
-+if ! [ "$CONDA_PREFIX" -ef "$BYOBU_PREFIX" ]; then
-+	if LC_ALL=C type conda 2>&1 | grep -q "function"; then
-+		conda activate ${BYOBU_PREFIX}
-+	elif LC_ALL=C type mamba 2>&1 | grep -q "function"; then
-+		mamba activate ${BYOBU_PREFIX}
-+	elif LC_ALL=C type micromamba 2>&1 | grep -q "function"; then
-+		micromamba activate ${BYOBU_PREFIX}
-+	else
-+		echo "WARNING: Please activate the byobu environment first."
++	# Activate the byobu environment using conda/(micro)mamba
++	if is_function conda; then
++		conda activate "$BYOBU_PREFIX"
++	elif is_function mamba; then
++		mamba activate "$BYOBU_PREFIX"
++	elif is_function micromamba; then
++		micromamba activate "$BYOBU_PREFIX"
 +	fi
 +fi
++BYOBU_CONDA_ROOT=$_CONDA_ROOT
++unset -f is_function
 +
  # Create and export the user configuration directory
  # BYOBU_CONFIG_DIR if set, ~/.byobu if it exists, otherwise XDG_CONFIG_HOME/byobu
