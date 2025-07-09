@@ -19,7 +19,7 @@ source:
     - 0002-byobu-conda.diff
 
 build:
-  number: 2
+  number: 3
   skip:
     - win
 
@@ -41,12 +41,10 @@ requirements:
 
 tests:
   - script:
-      - if: build_platform == target_platform
-        then: byobu -c "echo 'Hello conda-forge!'"
+      - byobu -c "echo 'Hello conda-forge!'"
       # Tests patch 0001 works
       - unset BYOBU_PYTHON
-      - if: build_platform == target_platform
-        then: test "$(which python)" = "$(which $(byobu -c 'echo ${BYOBU_PYTHON}'))"
+      - test "$(which python)" = "$(which $(byobu -c 'echo ${BYOBU_PYTHON}'))"
       # Test patch 0002 files
       - test -x ${CONDA_PREFIX}/bin/byobu-enable-conda
       - test -x ${CONDA_PREFIX}/bin/byobu-disable-conda
@@ -60,7 +58,8 @@ about:
     distribution. Byobu now includes an enhanced profiles, convenient
     keybindings, configuration utilities, and toggle-able system status
     notifications for both the GNU Screen window manager and the more modern
-    Tmux terminal multiplexer, and works on most Linux, BSD, and Mac distributions.
+    Tmux terminal multiplexer, and works on most Linux, BSD, and Mac
+    distributions.
   license: GPL-3.0-only
   license_file: COPYING
   homepage: https://www.byobu.org/
