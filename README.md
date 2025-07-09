@@ -7,20 +7,19 @@ Home: https://www.byobu.org/
 
 Package license: GPL-3.0-only
 
-Summary: Byobu is a text-based window manager and terminal multiplexer.
+Summary: Text-based window manager and terminal multiplexer
 
 Development: https://github.com/dustinkirkland/byobu
 
 Documentation: https://www.byobu.org/documentation
 
-Byobu was originally designed to provide elegant enhancements to the
-otherwise functional, plain, practical GNU Screen, for the Ubuntu server
+Byobu is a GPLv3 open source text-based window manager and terminal
+multiplexer. It was originally designed to provide elegant enhancements to
+the otherwise functional, plain, practical GNU Screen, for the Ubuntu server
 distribution. Byobu now includes an enhanced profiles, convenient
 keybindings, configuration utilities, and toggle-able system status
 notifications for both the GNU Screen window manager and the more modern
-Tmux terminal multiplexer, and works on most Linux, BSD, and Mac
-distributions.
-
+Tmux terminal multiplexer, and works on most Linux, BSD, and Mac distributions.
 
 Current build status
 ====================
