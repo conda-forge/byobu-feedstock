@@ -43,13 +43,12 @@ tests:
   - script:
       - byobu -c 'echo "Hello conda-forge!"'
       # Test patch 0001
-      - echo "$(env -u BYOBU_PYTHON byobu -c 'printenv BYOBU_PYTHON')"
       - test "$(command -v python)" -ef "$(env -u BYOBU_PYTHON byobu -c 'printenv BYOBU_PYTHON')"
       # Test patch 0002
       - test -x "${CONDA_PREFIX}/bin/byobu-conda"
       - test -x "${CONDA_PREFIX}/bin/byobu-disable-conda"
       - test -x "${CONDA_PREFIX}/bin/byobu-enable-conda"
-      - echo "$(env -i HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
+      - set -euxo pipefail
       - test "$CONDA_PREFIX" -ef "$(env -i HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
     requirements:
       run:
