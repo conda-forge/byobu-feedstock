@@ -48,14 +48,15 @@ tests:
       - test -x "${CONDA_PREFIX}/bin/byobu-conda"
       - test -x "${CONDA_PREFIX}/bin/byobu-disable-conda"
       - test -x "${CONDA_PREFIX}/bin/byobu-enable-conda"
-      - if [ -r "${CONDA_PREFIX}/etc/profile.d/conda.sh" ]; then echo "Local conda existed"; else echo "Local conda does not exist"; fi
-      - test "$CONDA_PREFIX" -ef "$(env -i BYOBU_CONDA_ROOT="$CONDA_PREFIX" HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
+      - if [ -x "${CONDA_PREFIX}/bin/micromamba" ]; then echo "Local micromamba exists"; else echo "Local micromamba does not exist"; fi
+      - echo "$(env -i HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv')"
+      - test "$CONDA_PREFIX" -ef "$(env -i HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
     requirements:
       run:
         - if: linux and build_platform != target_platform
           then:
-            - conda
             - coreutils
+            - micromamba
 
 about:
   summary: Text-based window manager and terminal multiplexer
