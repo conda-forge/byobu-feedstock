@@ -49,13 +49,13 @@ tests:
       - test -x "${CONDA_PREFIX}/bin/byobu-disable-conda"
       - test -x "${CONDA_PREFIX}/bin/byobu-enable-conda"
       - set -euxo pipefail
-      - test "$CONDA_PREFIX" -ef "$(env -i HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
+      - test "$CONDA_PREFIX" -ef "$(env -i BYOBU_CONDA_ROOT="$CONDA_PREFIX" HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
     requirements:
       run:
         - if: linux and build_platform != target_platform
           then:
+            - conda
             - coreutils
-            - micromamba
 
 about:
   summary: Text-based window manager and terminal multiplexer
