@@ -48,7 +48,7 @@ tests:
       - test -x "${CONDA_PREFIX}/bin/byobu-conda"
       - test -x "${CONDA_PREFIX}/bin/byobu-disable-conda"
       - test -x "${CONDA_PREFIX}/bin/byobu-enable-conda"
-      - set -euxo pipefail
+      - if [ -r "${CONDA_PREFIX}/etc/profile.d/conda.sh" ]; then echo "Local conda existed"; else echo "Local conda does not exist"; fi
       - test "$CONDA_PREFIX" -ef "$(env -i BYOBU_CONDA_ROOT="$CONDA_PREFIX" HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
     requirements:
       run:
