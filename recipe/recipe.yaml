@@ -54,10 +54,7 @@ tests:
       run:
         - if: linux and build_platform != target_platform
           then:
-            - conda
             - coreutils
-            - gettext
-            - mamba
             - micromamba
 
 about:
