@@ -49,6 +49,10 @@ tests:
       - test -x "${CONDA_PREFIX}/bin/byobu-disable-conda"
       - test -x "${CONDA_PREFIX}/bin/byobu-enable-conda"
       - test "$CONDA_PREFIX" -ef "$(env -i HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
+    requirements:
+      run:
+        - if: linux and build_platform != target_platform
+          then: ${{ stdlib('c') }}
 
 about:
   summary: Text-based window manager and terminal multiplexer
