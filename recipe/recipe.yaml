@@ -51,7 +51,9 @@ tests:
       - if [ -r "${CONDA_PREFIX}/etc/profile.d/conda.sh" ]; then echo "Local conda exists"; else echo "Local conda does not exist"; fi
       - printenv
       - echo "$(env -i HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv')"
-      - echo "$("$SHELL" -ec '. "${CONDA_PREFIX}/etc/profile.d/conda.sh"; conda deactivate; test -z "$CONDA_PREFIX"; '"${CONDA_PREFIX}/bin/byobu -c 'printenv CONDA_PREFIX'")"
+      - echo "1"
+      - echo "$(sh -ec '. "${CONDA_PREFIX}/etc/profile.d/conda.sh"; conda deactivate; test -z "$CONDA_PREFIX"; '"${CONDA_PREFIX}/bin/byobu -c 'printenv CONDA_PREFIX'")"
+      - echo "2"
       - echo "$(sh -ec 'eval "$(conda shell.posix hook)"; conda deactivate; test -z "$CONDA_PREFIX"; '"${CONDA_PREFIX}/bin/byobu -c 'printenv CONDA_PREFIX'")"
       - if: build_platform == target_platform
         then: test "$CONDA_PREFIX" -ef "$(env -i HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
@@ -59,9 +61,6 @@ tests:
     requirements:
       run:
         - conda
-        - if: linux and build_platform != target_platform
-          then:
-            - coreutils
 
 about:
   summary: Text-based window manager and terminal multiplexer
