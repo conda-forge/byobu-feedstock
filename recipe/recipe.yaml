@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/73cd2eed94c576213c5f25ab57adf6d8c83e792a/schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 schema_version: 1
 
 context:
@@ -13,13 +13,13 @@ source:
   url: https://github.com/dustinkirkland/byobu/archive/${{ version }}.tar.gz
   sha256: 9690c629588e8f95d16b2461950d39934faaf8005dd2a283886d4e3bd6c86df6
   patches:
-    # Ensure we use python in the same conda environment
+    # Ensure that byobu uses python in the same conda environment
     - 0001-use-local-python.diff
-    # Ensure byobu conda environment is activated
+    # Ensure the byobu conda environment is activated
     - 0002-byobu-conda.diff
 
 build:
-  number: 3
+  number: 4
   skip:
     - win
 
@@ -31,7 +31,7 @@ requirements:
   run:
     - newt
     - tmux >=1.5
-    # GNU Tools
+    # GNU packages
     - if: osx
       then:
         - coreutils
@@ -41,13 +41,14 @@ requirements:
 
 tests:
   - script:
-      - byobu -c "echo 'Hello conda-forge!'"
-      # Tests patch 0001 works
-      - unset BYOBU_PYTHON
-      - test "$(which python)" = "$(which $(byobu -c 'echo ${BYOBU_PYTHON}'))"
-      # Test patch 0002 files
-      - test -x ${CONDA_PREFIX}/bin/byobu-enable-conda
-      - test -x ${CONDA_PREFIX}/bin/byobu-disable-conda
+      - byobu -c 'echo "Hello conda-forge!"'
+      # Test patch 0001
+      - test "$(command -v python)" -ef "$(env -u BYOBU_PYTHON byobu -c 'printenv BYOBU_PYTHON')"
+      # Test patch 0002
+      - test -x "${CONDA_PREFIX}/bin/byobu-conda"
+      - test -x "${CONDA_PREFIX}/bin/byobu-disable-conda"
+      - test -x "${CONDA_PREFIX}/bin/byobu-enable-conda"
+      - test "$CONDA_PREFIX" -ef "$(env -i HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
 
 about:
   summary: Text-based window manager and terminal multiplexer
