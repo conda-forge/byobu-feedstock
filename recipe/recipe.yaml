@@ -49,10 +49,7 @@ tests:
       - test -x "${CONDA_PREFIX}/bin/byobu-conda"
       - test -x "${CONDA_PREFIX}/bin/byobu-disable-conda"
       - test -x "${CONDA_PREFIX}/bin/byobu-enable-conda"
-      - test "$CONDA_PREFIX" -ef "$(sh -ec 'eval "$(micromamba shell hook -s posix)"; micromamba deactivate; test -z "$CONDA_PREFIX"; '"${CONDA_PREFIX}/bin/byobu -c 'printenv CONDA_PREFIX'")"
-    requirements:
-      run:
-        - micromamba
+      - test "$CONDA_PREFIX" -ef "$(env -i HOME="$HOME" PATH="$PATH" QEMU_LD_PREFIX="$QEMU_LD_PREFIX" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
 
 about:
   summary: Text-based window manager and terminal multiplexer
