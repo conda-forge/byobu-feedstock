@@ -41,6 +41,7 @@ requirements:
 
 tests:
   - script:
+      - set -ex
       - byobu -c 'echo "Hello conda-forge!"'
       # Test patch 0001
       - test "$(command -v python)" -ef "$(env -u BYOBU_PYTHON byobu -c 'printenv BYOBU_PYTHON')"
@@ -48,7 +49,7 @@ tests:
       - test -x "${CONDA_PREFIX}/bin/byobu-conda"
       - test -x "${CONDA_PREFIX}/bin/byobu-disable-conda"
       - test -x "${CONDA_PREFIX}/bin/byobu-enable-conda"
-      - test "$CONDA_PREFIX" -ef "$(env -i HOME="$HOME" PATH="$PATH" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
+      - test "$CONDA_PREFIX" -ef "$(env -i HOME="$HOME" PATH="$PATH" QEMU_LD_PREFIX="$QEMU_LD_PREFIX" USER="$USER" byobu -c 'printenv CONDA_PREFIX')"
 
 about:
   summary: Text-based window manager and terminal multiplexer
