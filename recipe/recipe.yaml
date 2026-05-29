@@ -3,7 +3,7 @@ schema_version: 1
 
 context:
   name: byobu
-  version: "6.16"
+  version: "7.0"
 
 package:
   name: ${{ name|lower }}
@@ -11,7 +11,7 @@ package:
 
 source:
   url: https://github.com/dustinkirkland/byobu/archive/${{ version }}.tar.gz
-  sha256: ce294bbc2c04c2b2dd79e2d0ec336812d8e9bd4d9a7f696e2ba335ecbc17fe68
+  sha256: 1a69b7ab2fe17c3a8c7d8467929df0b62c144aa28876efc5eb151a1fc30b2132
   patches:
     # Ensure that byobu uses python in the same conda environment
     - 0001-use-local-python.diff
